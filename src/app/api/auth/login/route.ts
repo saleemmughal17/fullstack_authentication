@@ -1,37 +1,43 @@
-// src/app/api/auth/login/route.ts
-
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../../lib/prisma";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { getIronSession } from "iron-session";
+import { sessionOptions } from "../../../../../lib/session";
 
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
-
-    // Check if the user exists
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
-
+    
+    // Find user in database
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    // Check if the password is correct
+    // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    // Generate JWT token
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
-      expiresIn: "1h",
+    // Set session
+    const res = NextResponse.json({
+      message: "Login successful",
+      role: user.role,
     });
 
-    return NextResponse.json({ token });
+    const session = await getIronSession(req, res, sessionOptions);
+    session.user = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    await session.save();
+
+    return res;
   } catch (error) {
-    console.error("Login Error:", error);
+    console.error("Login error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
