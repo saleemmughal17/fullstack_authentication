@@ -43,7 +43,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/AdminDashboard", req.url));
   }
 
-  if (userRole === "user" && req.nextUrl.pathname !== "/DashboardUser") {
+  if (userRole === "USER" && req.nextUrl.pathname !== "/DashboardUser") {
     return NextResponse.redirect(new URL("/DashboardUser", req.url));
   }
 

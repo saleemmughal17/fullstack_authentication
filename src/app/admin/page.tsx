@@ -16,7 +16,7 @@ export default function AdminDashboard() {
     // Decode token manually or verify it on API
     const decoded = JSON.parse(atob(token.split(".")[1]));
     if (decoded.role !== "ADMIN") {
-      router.push("/dashboard");
+      router.push("/AdminDashboard");
     } else {
       setRole("ADMIN");
     }
