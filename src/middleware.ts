@@ -53,3 +53,4 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: ["/DashboardUser", "/AdminDashboard"], // ✅ Protect these routes
 };
+// middleware 
