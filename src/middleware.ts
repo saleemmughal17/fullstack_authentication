@@ -39,8 +39,8 @@ export async function middleware(req: NextRequest) {
   console.log("User Role:", userRole);
 
   // Redirect based on user role
-  if (userRole === "admin" && req.nextUrl.pathname !== "/AdminDashboard") {
-    return NextResponse.redirect(new URL("/AdminDashboard", req.url));
+  if (userRole === "Admin" && req.nextUrl.pathname !== "/admin") {
+    return NextResponse.redirect(new URL("/admin", req.url));
   }
 
   if (userRole === "USER" && req.nextUrl.pathname !== "/DashboardUser") {
@@ -51,6 +51,7 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/DashboardUser", "/AdminDashboard"], // ✅ Protect these routes
+  matcher: ["/admin" ], // ✅ Protect these routes
 };
 // middleware 
+

@@ -1,38 +1,40 @@
 "use client"
-import React from 'react';
-import JobCard from '../../components/JobCard';
-import SearchBar from '../../components/SearchBar';
+import Link from 'next/link'
 
-const HomePage: React.FC = () => {
-  const jobs = [
-    { id: '1', title: 'Frontend Developer', company: 'Tech Corp', location: 'Remote', description: 'Join our team!' },
-    { id: '2', title: 'Backend Developer', company: 'Abc', location: 'Remote', description: 'Join our team!' },
-    { id: '3', title: 'Frontend Developer', company: 'Tech Corp', location: 'Remote', description: 'Join our team!' },
-    { id: '4', title: 'Frontend Developer', company: 'Tech Corp', location: 'Remote', description: 'Join our team!' },
-  ];
-
-  const handleSearch = (query: string) => {
-    console.log('Searching for:', query);
-  };
-
+export default function Dashboard() {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Job Listings</h1>
-      <SearchBar onSearch={handleSearch} />
-      <div className="mt-4 space-y-4">
-        {jobs.map((job) => (
-          <JobCard
-            key={job.id}
-            title={job.title}
-            company={job.company}
-            location={job.location}
-            description={job.description}
-            onApply={() => console.log('Applying to:', job.title)}
-          />
-        ))}
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+      {/* Dashboard Container */}
+      <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-8 space-y-6">
+        
+        {/* Header Section */}
+        <header className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-gray-800">Welcome to Your Dashboard</h1>
+        </header>
+
+        {/* Stats or Info */}
+        <section className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 bg-gray-50 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-700">Your Activity</h3>
+              <p className="text-gray-500">Details about your activity here.</p>
+            </div>
+            <div className="p-4 bg-gray-50 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-700">Notifications</h3>
+              <p className="text-gray-500">Check your recent notifications here.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Apply Button */}
+        <section className="flex justify-center">
+          <Link href="/jobs">
+            <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200">
+              Go to Apply Form
+            </button>
+          </Link>
+        </section>
       </div>
     </div>
-  );
-};
-
-export default HomePage;
+  )
+}

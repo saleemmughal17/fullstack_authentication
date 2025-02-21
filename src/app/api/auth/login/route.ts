@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../../lib/prisma";
+import prisma from "../../../../../lib/prisma";
 import bcrypt from "bcrypt";
 import { getIronSession } from "iron-session";
 import { sessionOptions } from "../../../../../lib/session";
@@ -7,8 +7,8 @@ import { sessionOptions } from "../../../../../lib/session";
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
-    
-    // Find user in database
+
+    // Find user in the database
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
@@ -23,13 +23,15 @@ export async function POST(req: Request) {
     // Set session
     const res = NextResponse.json({
       message: "Login successful",
-      role: user.role,
+      name: user.name,  // Include user name
+      role: user.role,   // Include user role
     });
 
     const session = await getIronSession(req, res, sessionOptions);
     session.user = {
       id: user.id,
       email: user.email,
+      name: user.name,
       role: user.role,
     };
 

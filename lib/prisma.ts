@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { printTreeView } from "next/dist/build/utils";
 
+const prisma = new PrismaClient();
 
-
-export const prisma = new PrismaClient()
+export default prisma;

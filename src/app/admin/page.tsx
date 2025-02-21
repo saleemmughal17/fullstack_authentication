@@ -1,28 +1,40 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+"use client"
+import Link from 'next/link'
 
-export default function AdminDashboard() {
-  const router = useRouter();
-  const [role, setRole] = useState("");
+export default function Dashboard() {
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+      {/* Dashboard Container */}
+      <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-8 space-y-6">
+        
+        {/* Header Section */}
+        <header className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-gray-800">Welcome to Your Admin Dashboard</h1>
+        </header>
 
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
+        {/* Stats or Info */}
+        <section className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 bg-gray-50 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-700">Your Activity</h3>
+              <p className="text-gray-500">Details about your activity here.</p>
+            </div>
+            <div className="p-4 bg-gray-50 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-700">Notifications</h3>
+              <p className="text-gray-500">Check your recent notifications here.</p>
+            </div>
+          </div>
+        </section>
 
-    // Decode token manually or verify it on API
-    const decoded = JSON.parse(atob(token.split(".")[1]));
-    if (decoded.role !== "ADMIN") {
-      router.push("/AdminDashboard");
-    } else {
-      setRole("ADMIN");
-    }
-  }, []);
-
-  if (!role) return <p>Loading...</p>;
-
-  return <h1>Welcome, Admin!</h1>;
+        {/* Apply Button */}
+        <section className="flex justify-center">
+         
+            <Link href={"/addJob"} className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200">
+              Add Jobs here
+            </Link>
+          
+        </section>
+      </div>
+    </div>
+  )
 }

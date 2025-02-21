@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
           Job Board
         </Link>
         <div className="flex gap-4">
-          <Link href="/dashboard">Dashboard</Link>
+        
           <Link href="/login">Login</Link>
           <Link href="/signup">Register</Link>
         </div>
