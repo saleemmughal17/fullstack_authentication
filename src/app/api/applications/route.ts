@@ -50,7 +50,7 @@ export async function POST(req: Request) {
 
     const session = await getIronSession<SessionData>(req, new Response(), {
       password: process.env.SESSION_SECRET as string,
-      cookieName: "user_session",
+      cookieName: "auth_session",
     });
 
     const userId = session.user?.id;
@@ -99,12 +99,17 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
+    // Fetch only applications with a "pending" status
     const applications = await prisma.application.findMany({
+      where: {
+        status: 'pending', // Assuming the field is called "status" and the value is "pending"
+      },
       include: {
         job: true,
         user: true,
       },
     });
+
     return NextResponse.json({ success: true, applications });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Failed to fetch applications';

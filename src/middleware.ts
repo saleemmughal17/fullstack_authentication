@@ -1,57 +1,23 @@
 import { NextResponse, NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import { getIronSession } from "iron-session";
 
-interface SessionData {
-  user?: {
-    role: string;
-  };
-}
 
 export async function middleware(req: NextRequest) {
   const cookieStore = await cookies();
-  const token = cookieStore.get("user_session");
+  const token = cookieStore.get("auth_session");
 
 
 
-  console.log("Token from cookies:", token?.value);
-  console.log("Current Path:", req.nextUrl.pathname);
-
-
-
-  // Ensure SESSION_SECRET is present
-  if (!process.env.SESSION_SECRET) {
-    throw new Error("Missing SESSION_SECRET environment variable");
+  if (!token) {
+    return NextResponse.redirect(new URL("/Login", req.url));
   }
 
-  // Retrieve the session
-  const session = await getIronSession<SessionData>(req, new Response(), {
-    password: process.env.SESSION_SECRET as string, // Ensure password is correctly provided
-    cookieName: "user_session",
-  });
 
-  if(!token){
-    return NextResponse.redirect(new URL("/login", req.url));
 
-  }
-
-  const userRole = session.user?.role;
-  console.log("User Role:", userRole);
-
-  // Redirect based on user role
-  if (userRole === "Admin" && req.nextUrl.pathname !== "/admin") {
-    return NextResponse.redirect(new URL("/admin", req.url));
-  }
-
-  if (userRole === "USER" && req.nextUrl.pathname !== "/DashboardUser") {
-    return NextResponse.redirect(new URL("/DashboardUser", req.url));
-  }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin" ], // ✅ Protect these routes
+  matcher: ["/DashboardUser", "/AdminDashboard", "/jobs","/AddJob","/applications","/getApplications","/getApplications2","/jobs","/updateApplicationStatus","/logout"], 
 };
-// middleware 
-

@@ -123,15 +123,26 @@ const JobListingPage = () => {
         <div className="min-h-screen bg-gray-50">
 
             <header className="bg-white shadow">
-                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Job Listings</h1>
-                </div>
+            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            {/* Heading */}
+            <h1 className="text-3xl font-bold text-gray-900">
+                Jobs
+            </h1>
+
+            {/* Responsive Button */}
+            <Link href="/admin">
+                <button className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-200">
+                Already Apply
+                </button>
+            </Link>
+        </div>
             </header>
 
-
+            {/* <main className="max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8"> */}
+            {/* <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6"> */}
             <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                 {/* Filters */}
-                <section className="mb-8 p-4 bg-white rounded-lg shadow flex flex-wrap gap-6">
+                  <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                     <div>
                         <label htmlFor="categoryFilter" className="block text-sm font-medium text-gray-700">
                             Category
@@ -180,56 +191,8 @@ const JobListingPage = () => {
                 </section>
 
 
-                {/* <section className="grid grid-cols-1 gap-6">
-          {filteredJobs?.map(job => (
-            <div
-              key={job.id}
-              className="bg-white p-6 rounded-lg shadow border border-gray-200 hover:shadow-lg transition duration-300"
-            >
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold text-gray-800">{job.title}</h2>
-                {job.description && <p className="mt-2 text-gray-600">{job.description}</p>}
-                <div className="mt-2 flex flex-wrap gap-2 text-sm">
-                  {job.category && (
-                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">{job.category}</span>
-                  )}
-                  {job.location && (
-                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded">{job.location}</span>
-                  )}
-                  {job.salary && (
-                    <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded">{job.salary}</span>
-                  )}
-                </div>
-              </div>
-              <div className="flex space-x-4">
-                {role !== 'admin' && (
-                  <Link href={`/jobs/${job.id}/apply`}>
-                    <button className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
-                      Apply
-                    </button>
-                  </Link>
-                )}
-                {role === 'admin' && (
-                  <>
-                    <button
-                      onClick={() => handleUpdate(job)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => handleDelete(job)}
-                      className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-                    >
-                      Delete
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          ))}
-        </section> */}
-                <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              
+                <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
                     {filteredJobs?.map((job) => (
                         <div
                             key={job.id}

@@ -1,60 +1,32 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../../lib/prisma";
-import bcrypt from "bcrypt";
-
-// Define interface for expected body
-interface CreateUserRequest {
-  email: string;
-  password: string;
-  name: string;
-}
+import bcrypt from "bcryptjs";
+import prisma from "../../../../../lib/prisma"; // Import Prisma instance
 
 export async function POST(req: Request) {
   try {
-    // Parse JSON from the request body
-    const { email, password, name }: CreateUserRequest = await req.json();
+    const { name, email, password } = await req.json();
 
-    console.log('Received email, password, and name:', email, password, name);
-
-    // Check if the required fields are provided
-    if (!email || !password || !name) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+   
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return NextResponse.json({ error: "User already exists!" }, { status: 400 });
     }
 
-    // Hash the password
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Attempt to create a new user in the database with a hardcoded "USER" role
-    const user = await prisma.user.create({
+    
+    const newUser = await prisma.user.create({
       data: {
-        name, // name is correctly defined in your schema
+        name,
         email,
         password: hashedPassword,
-        role: "USER", // Hardcoded role for now
+        role: "user", 
       },
     });
 
-    // Return success response
-    return NextResponse.json({ message: "User registered successfully" });
-
+    return NextResponse.json({ message: "User created successfully!" }, { status: 201 });
   } catch (error) {
-    // Log full error for better debugging
-    console.error("Signup error:", error);
-
-    // Handle different types of errors
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { error: "Failed to register user", details: error.message },
-        { status: 500 }
-      );
-    } else {
-      return NextResponse.json(
-        { error: "Unknown error occurred", details: JSON.stringify(error) },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json({ error: "Something went wrong!" }, { status: 500 });
   }
 }

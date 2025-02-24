@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '../../../../../lib/prisma';
 
-export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const params = await context.params;
-  if (!params?.id) {
-    return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
-  }
+export async function PUT(req: NextRequest, {params}: { params: Promise<{ id: string }> }) {
+  // if (!params?.id) {
+  //   return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
+  // }
 
-  const jobId = params.id;
+  const {id} = await  params;
 
-  const jobIdInt = parseInt(jobId, 10);
+  const jobIdInt = parseInt(id, 10);
+  console.log("id   ",jobIdInt)
 
   const existingJob = await prisma.job.findUnique({
     where: { id: jobIdInt },
