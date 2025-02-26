@@ -5,6 +5,7 @@ export async function GET(): Promise<NextResponse> {
   try {
     const pendingJobs = await prisma.application.findMany({
       where: { status: "pending" }, 
+      include:{job:true}
     });
 
     return NextResponse.json(pendingJobs, { status: 200 });

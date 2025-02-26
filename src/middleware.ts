@@ -9,7 +9,7 @@ export async function middleware(req: NextRequest) {
 
 
   if (!token) {
-    return NextResponse.redirect(new URL("/Login", req.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
 
@@ -19,5 +19,8 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/DashboardUser", "/AdminDashboard", "/jobs","/AddJob","/applications","/getApplications","/getApplications2","/jobs","/updateApplicationStatus","/logout"], 
+  matcher: [
+    "/DashboardUser",
+     "/admin",
+     "/jobs","/addJob","/applications","/applicationlist","/api/applications","/api/getapplication","/api/jobs","/api/update2"], 
 };

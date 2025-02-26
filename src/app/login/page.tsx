@@ -6,6 +6,7 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
+import { useUser } from "../../context/AuthContext";
 
 // Define the schema using Zod
 const loginSchema = z.object({
@@ -18,26 +19,32 @@ type LoginData = z.infer<typeof loginSchema>;
 // Create a function to handle the login API request
 const loginRequest = async (data: LoginData) => {
   const response = await axios.post("/api/auth/login", data);
+  
   return response.data;
 };
 
 // const loginRequest = async (data: LoginData) => {
-//   const response = await axios.post(`${window.location.origin}/api/auth/login`, data);
-//   return response.data;
-// };
-
-export default function LoginPage() {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginData>({ resolver: zodResolver(loginSchema) });
+  //   const response = await axios.post(`${window.location.origin}/api/auth/login`, data);
+  //   return response.data;
+  // };
+  
+  export default function LoginPage() {
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginData>({ resolver: zodResolver(loginSchema) });
+    const {login}= useUser()
   const router = useRouter();
 
   // Use the useMutation hook from TanStack Query
-  const { mutateAsync, isLoading, error } = useMutation({
+  const { mutateAsync, isPending, error } = useMutation({
     mutationFn: loginRequest,
     onSuccess: (data) => {
+      console.log('login data........',data)
+      login(data.user)
       // Save user name and role in localStorage
-      if (data.role === "Admin") {
+      if (data?.user.role == "Admin") {
+        console.log('asfdgf');
+        
         router.push("/admin");
-      } else {
+      } else if(data?.user.role == "USER"){
         router.push("/DashboardUser");
       }
       const userData = {
@@ -45,14 +52,14 @@ export default function LoginPage() {
         role: data.role,
 
       };
-      localStorage.setItem("user", JSON.stringify(userData));
+      // localStorage.setItem("User", JSON.stringify(userData));
 
-      // Redirect based on role
-      if (data.role === "Admin") {
-        router.push("/admin");
-      } else {
-        router.push("/DashboardUser");
-      }
+      // // Redirect based on role
+      // if (data.role === "Admin") {
+      //   router.push("/admin");
+      // } else {
+      //   router.push("/DashboardUser");
+      // }
     },
     onError: (err) => {
       alert("Login failed. Please check credentials.");
@@ -86,9 +93,9 @@ export default function LoginPage() {
         <button
           type="submit"
           className="bg-blue-500 text-white p-2 rounded w-full"
-          disabled={isLoading} // Disable button while loading
+          disabled={isPending} // Disable button while loading
         >
-          {isLoading ? "Logging in..." : "Login"}
+          {isPending ? "Logging in..." : "Login"}
         </button>
       </form>
       {error && <div className="text-red-500 mt-2">{error.message}</div>}
